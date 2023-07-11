@@ -9,7 +9,7 @@ class AccountItem extends Model
 {
     use HasFactory;
 
-    protected $with = ['account', 'user'];
+    protected $with = ['account', 'user',];
 
 
     // Generege referece from other account_item with the same account when boot

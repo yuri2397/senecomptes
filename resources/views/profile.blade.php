@@ -5,38 +5,42 @@
         <span class="flaticon-award"></span>
         <div class="container mt-1">
             @if (Auth::check() && $account_items && $account_items->count() > 0)
+            <a href="{{ route('new-account') }}" role="button" class="btn btn-primary">Ajouter un nouveau profil</a>
+            <br>
+            <br>
             <div class="what-we-do">
                 <div class="container">
                     <div class="row">
+
                         @foreach ($account_items as $account_item)
+                        
                         <div class="col-lg-4 col-md-6">
-                            <div class="single-do active text-center">
-                                <div class="do-caption">
+                            <div class="single-do active text-center" style="background: #f1f1f1">
+                                <div class="do-caption" >
                                     <h3 class="">
-                                        Compte <b>{{ $account_item->reference }}</b>
+                                        Profil <b>{{ $account_item->reference }}</b>
                                     </h3>
                                     <br>
                                     <div class="footer-tittle text-start">
                                         <div class="do-btn">
-                                            <a><i class="ti-arrow-right"></i>
+                                            <a>
                                                 Email:
-                                                <b class="text-lowercase mx-2">{{ $account_item->account->username }}</b>
+                                                <b class="text-lowercase mx-2 h6 text-dark">{{ $account_item->account->username }}</b>
                                             </a>
                                         </div>
                                         <br>
                                         <div class="do-btn">
                                             <a>
-                                                <i class="ti-arrow-right"></i>
                                                 Mot de passe:
-                                                <b class="text-lowercase mx-2">{{ $account_item->account->password }}</b>
+                                                <b class="text-lowercase mx-2  h6 text-dark">{{ $account_item->account->password }}</b>
                                             </a>
                                         </div>
                                         <br>
                                         <div class="do-btn">
                                             <a>
-                                                <i class="ti-arrow-right"></i>
+                                                
                                                 CODE PIN:
-                                                <b class="text-lowercase mx-2">{{ $account_item->pin}}</b>
+                                                <b class="text-lowercase mx-2 h6 text-dark">{{ $account_item->pin}}</b>
                                             </a>
                                         </div>
                                         <br>

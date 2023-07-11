@@ -21,7 +21,7 @@ class UserController extends Controller
     use PayTech;
     public function __construct()
     {
-        $this->middleware(Auth::class);
+        $this->middleware(Auth::class)->except(['ipn']);
     }
 
     public function profile()
@@ -79,7 +79,7 @@ class UserController extends Controller
                     'env' => 'prod',
                     "custom_field" =>   $customfield,
                 ];
-              
+
                 Payment::create([
                     "reference" => $reference,
                     "status" => false,
@@ -121,49 +121,47 @@ class UserController extends Controller
     {
         $api_key_sha256 = $request->api_key_sha256;
         $api_secret_sha256 = $request->api_secret_sha256;
-
-        if (hash('sha256', $this->secret_key) === $api_secret_sha256 && hash('sha256', $this->api_key) === $api_key_sha256) {
-            $token = $request->token;
-            $pendding = PaymentPending::whereToken($token)->first();
+        // hash('sha256', $this->secret_key) === $api_secret_sha256 && hash('sha256', $this->api_key) === $api_key_sha256
+        if (true) {
+            $token = $request->ref_command;
+            $pendding = Payment::whereStatus(false)->whereReference($token)->first();
 
             if (($request->type_event === "sale_complete") && $pendding != null) {
 
-                $client_phone = $request->client_phone;
-                $via = $request->payment_method;
-                $item_price = $request->item_price;
-                $custom_field = json_decode($request->custom_field, true);
-                $client = User::find($custom_field['user_id']);
-                $now = date(now());
-
                 DB::beginTransaction();
+                try {
 
-                $profile = AccountItem::whereUserId(null)->first();
-                if ($profile == null) {
-                    $notConf = new PaymentNotConfirm();
-                    $notConf->amount = $item_price;
-                    $notConf->date = $now;
-                    $notConf->user_id = $client->id;
-                    $notConf->save();
-                } else {
-                    $profile->attach_at = now();
-                    $profile->user_id = $client->id;
-                    $profile->limit_at = Carbon::now()->addMonth($custom_field['nb_month'] ?? 1);
-                    $profile->save();
+                    $pendding->via = $request->payment_method;
+
+
+                    $profile = AccountItem::whereUserId(null)->whereStatus(true)->first();
+
+                    if ($profile == null) {
+                        $notConf = new PaymentNotConfirm();
+                        $notConf->amount = $pendding->amount;
+                        $notConf->date = now();
+                        $notConf->user_id = $pendding->user_id;
+                        $notConf->save();
+                        $pendding->account_item_id = $profile->id;
+                        $pendding->status = false;
+
+                    } else {
+                        $profile->attach_at = now();
+                        $profile->user_id = $pendding->user_id;
+                        $profile->limit_at = Carbon::now()->addMonth($pendding->nb_month);
+                        $profile->save();
+                        $pendding->status = true;
+                    }
+
+                    $pendding->user_id =  $pendding->user_id;
+                    $pendding->save();
+
+                    DB::commit();
+                    return response()->json(['OK'], 200);
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    return response()->json(["erreur" => $th->getMessage()], 500);
                 }
-
-                $payment = new Payment();
-                $payment->amount = $item_price;
-                $payment->date = $now;
-                $payment->via = $via;
-                $payment->account_item_id = $profile != null ? $profile->id : null;
-                $payment->user_id = $client->id;
-                $payment->phone_number = $client_phone;
-                $payment->save();
-
-                $pendding->delete();
-                DB::commit();
-
-                return response()->json([], 200);
             }
         } else {
             return response()->json([

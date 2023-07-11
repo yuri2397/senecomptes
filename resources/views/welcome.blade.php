@@ -15,7 +15,7 @@
                                    </p>
                                    <div class="hero__btn" data-animation="fadeInLeft" data-delay=".8s">
                                        @if (!Auth::check())
-                                       <li><a href="/register" class="btn hero-btn">Créer mon compte</a></li>
+                                       <li><a href="/login" class="btn hero-btn">Se connecter</a></li>
                                        @else
                                        <li><a href="/login" class="btn hero-btn"> Voir mon profil </a></li>
                                        </a></li>
