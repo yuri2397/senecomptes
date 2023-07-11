@@ -99,18 +99,6 @@ class UserController extends Controller
                 toastr()->error('Une erreur s\'est produite.', 'Oups !!');
                 return redirect()->route('new-account');
             }
-
-
-            // $account = new Account();
-            // $account->user_id = auth()->user()->id;
-            // $account->account_item_id = $availableAccount->id;
-            // $account->nb_month = $request->nb_month;
-            // $account->save();
-
-            // $availableAccount->user_id = auth()->user()->id;
-            // $availableAccount->save();
-
-            // return redirect()->route('profile');
         }
 
         toastr()->error('Aucun compte disponible pour le moment.');

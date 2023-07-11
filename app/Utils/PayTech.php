@@ -8,7 +8,7 @@ use App\Models\PaymentPending;
 trait PayTech
 {
     protected $price = 2500;
-    protected $base_url = "https://sencomptes.com/api";
+    protected $base_url = "https://paytech.com/api";
     protected $command_name = "Abonnement Netflix";
     protected $host = "https://sencomptes.com";
     protected $paytech_host = "https://paytech.sn";
