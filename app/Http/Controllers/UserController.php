@@ -12,6 +12,7 @@ use App\Http\Middleware\Auth;
 use App\Models\PaymentPending;
 use Illuminate\Support\Carbon;
 use App\Models\PaymentNotConfirm;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -45,7 +46,7 @@ class UserController extends Controller
         return view('new-account');
     }
 
-    public function newAccountPost(Request $request)
+    public function newAccountPost(Request $request, Logger $log)
     {
         $request->validate([
             'nb_month' => 'required|integer|min:1|max:3',
@@ -76,7 +77,7 @@ class UserController extends Controller
                     "success_url"  =>  $this->host . '/pay-success',
                     "ipn_url"      =>  $this->host . '/api/pay-ipn',
                     "cancel_url"   =>  $this->host . '/pay-cancel',
-                    'env' => 'prod',
+                    'env' => 'test',
                     "custom_field" =>   $customfield,
                 ];
 
@@ -90,9 +91,9 @@ class UserController extends Controller
                     "user_id" => $user->id,
                 ]);
 
-                toastr()->info('Payer en ligne et activer votre compte', 'Informtion');
+                // DB::commit();
 
-                DB::commit();
+                toastr()->info('Payer en ligne et activer votre compte', 'Informtion');
                 return $this->requestPayment($data, $user);
             } catch (\Exception $e) {
                 DB::rollBack();

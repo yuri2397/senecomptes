@@ -4,20 +4,28 @@ namespace App\Utils;
 
 use App\Models\PayementPending;
 use App\Models\PaymentPending;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Http;
 
 trait PayTech
 {
     protected $price = 2500;
-    protected $base_url = "https://paytech.com/api";
     protected $command_name = "Abonnement Netflix";
     protected $host = "https://sencomptes.com";
     protected $paytech_host = "https://paytech.sn";
-    protected $api_key = "e48863b91a1e6edea5f95fda966c0e4bb3be1cb08f849b5873656db9d209f103";
-    protected $secret_key = "85fb1a9ccfa99b1105bc23526ef43ae3c2226031f654bfd20f28e58bc3e72b8e";
+    protected $api_key = "a22662c75275e4d6fce5ace7ed3cb611e911e556efc1806824c4854c9a54a99f";
+    protected $secret_key = "459ea7b2c950cc05e01e17e45f5204c595e81603d23349537f15f04c15c6395c";
 
     protected function requestPayment($data, $client)
     {
-        $ch = curl_init($this->base_url . "/payment/request-payment");
+        // return Http::withHeaders(array_merge([
+        //     "API_KEY: {$this->api_key}",
+        //     "API_SECRET: {$this->secret_key}"
+        // ], [
+        //     'Content-Type: application/x-www-form-urlencoded;charset=utf-8',
+        //     'Content-Length: ' . mb_strlen(http_build_query($data))
+        // ]))->post("https://paytech.sn/api/payment/request-payment", $data);
+        $ch = curl_init("https://paytech.sn/api/payment/request-payment");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -32,7 +40,6 @@ trait PayTech
         ]));
 
         $rawResponse = curl_exec($ch);
-
         $jsonResponse = json_decode($rawResponse, true);
 
         if ($jsonResponse != null && $jsonResponse['success'] === 1) {
