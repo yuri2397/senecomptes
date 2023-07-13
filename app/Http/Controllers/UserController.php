@@ -15,6 +15,7 @@ use App\Models\PaymentNotConfirm;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
@@ -74,13 +75,14 @@ class UserController extends Controller
                     "ref_command" => $reference,
                     'item_name' => $this->command_name,
                     'command_name' => $this->command_name,
-                    "success_url"  =>  $this->host . '/pay-success',
-                    "ipn_url"      =>  $this->host . '/api/pay-ipn',
-                    "cancel_url"   =>  $this->host . '/pay-cancel',
+                    "success_url"  =>  URL::to('/pay-success'),
+                    "ipn_url"      =>  URL::to('/api/pay-ipn'),
+                    "cancel_url"   =>  URL::to('/pay-cancel'),
                     'env' => 'test',
                     "custom_field" =>   $customfield,
                 ];
-
+                $log->debug($data);
+                return $data;
                 Payment::create([
                     "reference" => $reference,
                     "status" => false,
@@ -106,8 +108,9 @@ class UserController extends Controller
         return redirect()->route('new-account');
     }
 
-    public function ipn(Request $request)
+    public function ipn(Request $request, Logger $logger)
     {
+        $logger->debug($request->all());
         $api_key_sha256 = $request->api_key_sha256;
         $api_secret_sha256 = $request->api_secret_sha256;
         // hash('sha256', $this->secret_key) === $api_secret_sha256 && hash('sha256', $this->api_key) === $api_key_sha256
