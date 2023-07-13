@@ -91,7 +91,7 @@ class UserController extends Controller
                     "user_id" => $user->id,
                 ]);
 
-                // DB::commit();
+                DB::commit();
 
                 toastr()->info('Payer en ligne et activer votre compte', 'Informtion');
                 return $this->requestPayment($data, $user);
