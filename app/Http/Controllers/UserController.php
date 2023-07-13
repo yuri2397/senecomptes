@@ -81,8 +81,6 @@ class UserController extends Controller
                     'env' => 'test',
                     "custom_field" =>   $customfield,
                 ];
-                $log->debug($data);
-                return $data;
                 Payment::create([
                     "reference" => $reference,
                     "status" => false,
