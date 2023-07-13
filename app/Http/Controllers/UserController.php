@@ -86,6 +86,7 @@ class UserController extends Controller
                     "status" => false,
                     "account_item_id" => $availableAccount->id,
                     "via" => "PayTech",
+                    "nb_month" => $request->nb_month,
                     "date" => Carbon::now(),
                     "amount" => $this->price * $request->nb_month,
                     "user_id" => $user->id,
