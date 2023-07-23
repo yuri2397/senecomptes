@@ -13,6 +13,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::view('/policy', 'policy');
+
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');
 Route::post('/profile/new-pin', [UserController::class, 'newProfile'])->name('new-pin');
 Route::get('/new-account', [UserController::class, 'newAccount'])->name('new-account');
