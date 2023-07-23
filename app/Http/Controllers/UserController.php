@@ -42,6 +42,22 @@ class UserController extends Controller
         return view('profile', compact('account_items'));
     }
 
+    public function newProfile(Request $request, Logger $log)
+    {
+        $id = $request->id;
+        $log->debug($id);
+        $profile = AccountItem::find($id);
+        if ($profile) {
+            $profile->pin = random_int(1000, 9999);
+            $profile->save();
+            toastr()->success("Nouveau code pin générer pour ce profil.", 'Informtion');
+           return back();
+        }
+        toastr()->info("Le profil selectionné n'existe pas", 'Informtion');
+
+        return back();
+    }
+
     public function newAccount()
     {
         return view('new-account');
@@ -135,7 +151,6 @@ class UserController extends Controller
                         $notConf->save();
                         $pendding->account_item_id = $profile->id;
                         $pendding->status = false;
-
                     } else {
                         $profile->attach_at = now();
                         $profile->user_id = $pendding->user_id;

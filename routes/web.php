@@ -14,6 +14,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+Route::post('/profile/new-pin', [UserController::class, 'newProfile'])->name('new-pin');
 Route::get('/new-account', [UserController::class, 'newAccount'])->name('new-account');
 Route::post('/new-account', [UserController::class, 'newAccountPost'])->name('new-account-post');
 

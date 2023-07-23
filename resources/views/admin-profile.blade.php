@@ -33,7 +33,7 @@
                 </div>
                 <hr>
                 @foreach ($account->account_items as $account_item)
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-4 col-md-6">
                     <div class="single-do active text-center mb-30 p-3">
                         <div class="do-caption">
                             <h2 class="">
@@ -76,6 +76,19 @@
                                         </b>
                                     </a>
                                 </div>
+                                @if ($account_item->user)
+                                <br>
+                                <div class="alert alert-danger">
+                                    Expire le : {{ $account_item->limit_at }}
+                                </div>
+                                @endif
+                                <br>
+                                <br>
+                                <form method="POST" action="{{ route('new-pin') }}">
+                                    @csrf
+                                    <input type="hidden" name="id" id="id" value="{{ $account_item->id }}">
+                                    <button class="btn btn-success btn-sm">Regenerer code PIN</button>
+                                </form>
                             </div>
                         </div>
                     </div>
