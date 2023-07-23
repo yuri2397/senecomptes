@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use WhatsappService;
 
 class RegisterController extends Controller
 {
@@ -27,7 +28,7 @@ class RegisterController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, WhatsappService $whatsappService)
     {
         $request->validate([
             'phone' => ['required', 'regex:/^221(70|76|77|78)[0-9]{7}$/i', 'unique:users,phone'],
@@ -49,6 +50,10 @@ class RegisterController extends Controller
         $user->password = Hash::make($request->password);
 
         $user->save();
+
+        try {
+            $whatsappService->sendMessage();        } catch (\Throwable $th) {
+        }
 
         return  redirect('/login')->with('success', 'Votre compte a été créé avec succès.');
     }
