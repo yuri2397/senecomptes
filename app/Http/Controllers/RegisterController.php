@@ -49,12 +49,10 @@ class RegisterController extends Controller
         // $user->email = "Indéfini";
         $user->password = Hash::make($request->password);
 
-        $user->save();
 
-        try {
-            $whatsappService->sendMessage(formatPhoneNumber($request->phone, false));
-        } catch (\Throwable $th) {
-        }
+        $whatsappService->sendMessage(formatPhoneNumber($request->phone, false), "bienvenue", "fr_FR");
+
+        $user->save();
 
         return  redirect('/login')->with('success', 'Votre compte a été créé avec succès.');
     }
