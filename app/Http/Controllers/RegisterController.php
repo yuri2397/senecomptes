@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Providers\WhatsappService;
 use Illuminate\Support\Facades\Hash;
-use WhatsappService;
 
 class RegisterController extends Controller
 {
@@ -46,7 +46,7 @@ class RegisterController extends Controller
         $user = new User();
         $user->name = $request->name;
         $user->phone = $request->phone;
-        $user->email = "Indéfini";
+        // $user->email = "Indéfini";
         $user->password = Hash::make($request->password);
 
         $user->save();

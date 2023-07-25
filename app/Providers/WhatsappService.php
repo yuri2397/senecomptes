@@ -1,5 +1,5 @@
 <?php
-
+namespace App\Providers;
 use Illuminate\Support\Facades\Http;
 
 class WhatsappService
@@ -12,7 +12,7 @@ class WhatsappService
             "Content-Type" => "application/json",
             "Accept" => "application/json",
             "Authorization" => "Bearer " . env("WHATSAPP_TOKEN")
-        ])->post($url);
+        ])->post($url, $body);
 
         if($response->successful()){
             return true;
