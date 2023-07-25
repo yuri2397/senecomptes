@@ -7,7 +7,7 @@ class WhatsappService
     public function sendMessage($phone,$template_name = "bienvenue", $lang = "fr_FR")
     {
         $url = env("WHATSAPP_URL");
-        $body = ["messaging_product" => "whatsapp", "to" => "$phone", "type" => "template", "template" => ["name" => "$template_name", "language" => ["code" => "$lang"]]];
+        $body = ["messaging_product" => "whatsapp", "to" => "$phone", "type" => "template", "template" => ["name" => "$template_name",]];
         $response = Http::withHeaders([
             "Content-Type" => "application/json",
             "Accept" => "application/json",
