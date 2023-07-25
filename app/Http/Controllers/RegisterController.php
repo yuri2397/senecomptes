@@ -52,7 +52,8 @@ class RegisterController extends Controller
         $user->save();
 
         try {
-            $whatsappService->sendMessage();        } catch (\Throwable $th) {
+            $whatsappService->sendMessage(formatPhoneNumber($request->phone, false));
+        } catch (\Throwable $th) {
         }
 
         return  redirect('/login')->with('success', 'Votre compte a été créé avec succès.');
