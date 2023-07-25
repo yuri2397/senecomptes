@@ -50,7 +50,7 @@ class RegisterController extends Controller
         $user->password = Hash::make($request->password);
 
 
-        $whatsappService->sendMessage(formatPhoneNumber($request->phone, false), "bienvenue", "fr_FR");
+        $whatsappService->sendMessage(formatPhoneNumber($request->phone, false), "bienvenue");
 
         $user->save();
 
